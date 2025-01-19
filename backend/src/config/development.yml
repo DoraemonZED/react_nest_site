@@ -1,0 +1,56 @@
+# 基本
+app:
+  prefix: '/api'
+  docs: '/api-docs'
+  port: 8910
+  logger:
+    dir: '../logs'
+  file:
+    location: '../upload'
+    domain: 'http://localhost:8910'
+    serveRoot: '/static'
+
+# 数据库
+db:
+  mysql:
+    type: 'mysql'
+    host: 'localhost'
+    username: 'root'
+    password: '123456'
+    database: 'website'
+    port: 3306
+    charset: 'utf8mb4'
+    logger: 'advanced-console'
+    logging:
+      - error
+    multipleStatements: true
+    dropSchema: false
+    synchronize: true
+    supportBigNumbers: true
+    bigNumberStrings: true
+    autoLoadEntities: true
+    keepConnectionAlive: true
+    collation: 'utf8mb4_bin'
+
+redis:
+  #  host: 'localhost'
+  #  port: 6379
+  #  db: 0
+  #  keyPrefix: 'nest:'
+  #  name: 'yh-0'
+  type: 'single'
+  url: 'redis://localhost:6379'
+# 多例
+#  type: 'cluster'
+#  nodes:
+#    - host: '127.0.0.1'
+#      port: 6379
+#    - host: '127.0.0.2'
+#      port: 6379
+
+
+# jwt 配置
+jwt:
+  secret: 'zANDwNQVFz1xlfG9myPxVWAkq4iXJEPhI'
+  signOptions:
+    expiresIn: '1h'
