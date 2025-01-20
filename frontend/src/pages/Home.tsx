@@ -7,13 +7,16 @@ const Home = () => {
   function showMessage() {
     message.show('这是一个消息', 'primary');
   }
+  function showMessage2() {
+    message.show('这是一个消息很长很长很长很长很长很长很长很长很长很长很长很长很，长很长很长很长v很长很长的消息！！！！', 'success');
+  }
   
   return (
     <div>
       <h1>首页</h1>
       <div className='flex justify-center items-center h-screen gap-4 flex-wrap'>
         <Button onPress={showMessage}>未设置</Button>
-        <Button color='primary'>primary</Button>
+        <Button color='primary' onPress={showMessage2}>primary</Button>
         <Button color='secondary'>secondary</Button>
         <Button color='success'>success</Button>
         <Button color='warning'>warning</Button>

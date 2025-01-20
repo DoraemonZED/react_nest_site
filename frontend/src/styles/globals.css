@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    /* 移动端基准字体大小 */
+    font-size: 14px;
+  }
+  
+  /* 平板电脑 */
+  @media (min-width: 768px) {
+    html {
+      font-size: 15px;
+    }
+  }
+  
+  /* 桌面端 */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  
+  /* 大屏幕 */
+  @media (min-width: 1536px) {
+    html {
+      font-size: 18px;
+    }
+  }
+}
+
+/* 添加平滑字体缩放 */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 设置滚动条样式 */
+.styled-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(175, 180, 43, 0.5) #0000;
+  scrollbar-gutter: stable;
+}

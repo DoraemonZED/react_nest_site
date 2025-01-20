@@ -12,7 +12,7 @@ const HamburgerButton = ({ isOpen, onPress }: HamburgerButtonProps) => {
     <Button
       isIconOnly
       variant="light"
-      className="md:hidden relative w-10 h-10"
+      className="md:hidden relative w-10 h-10 scale-[0.8]"
       onPress={onPress}
     >
       <motion.div

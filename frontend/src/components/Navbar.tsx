@@ -49,7 +49,7 @@ const Navbar = () => {
                   isIconOnly
                   variant="light"
                   as="a"
-                  href="https://github.com/yourusername"
+                  href="/xxx"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -84,8 +84,8 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.2 }}
-            className="absolute w-full px-2.5 md:hidden"
-            style={{ top: "100%", zIndex: 100 }}
+            className="absolute w-full md:hidden"
+            style={{ top: "calc(100% - 0.5rem)", zIndex: 100 }}
           >
             <Card className="backdrop-blur-sm bg-content1/90">
               <div className="p-4">

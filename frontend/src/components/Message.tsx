@@ -31,7 +31,8 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
           border border-white/10
           px-4 py-2 sm:px-4 sm:py-2.5
           text-sm sm:text-base
-          w-[280px] sm:w-[320px]
+          max-w-[50vw]
+          min-w-[10rem]
           flex items-center
           backdrop-saturate-150
           z-[1000]

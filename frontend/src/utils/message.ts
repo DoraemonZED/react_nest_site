@@ -23,7 +23,7 @@ class MessageManager {
   constructor() {
     if (typeof window !== 'undefined') {
       this.container = document.createElement('div');
-      this.container.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-[999] flex flex-col gap-2';
+      this.container.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-[999] flex flex-col gap-2 items-center';
       document.body.appendChild(this.container);
       this.root = createRoot(this.container);
     }
