@@ -8,6 +8,8 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
@@ -66,8 +68,8 @@ module.exports = {
       themes: {
         light: {
           colors: {
-            background: "#ffffff",
-            foreground: "#11181C",
+            background: "#f8f9fa",  // 更柔和的背景色
+            foreground: "#2D3748",  // 更深的文字颜色
             primary: {
               50: "#f7f8ea",
               100: "#ecefc8",
@@ -82,9 +84,9 @@ module.exports = {
               DEFAULT: "#AFB42B",
               foreground: "#ffffff",
             },
-            content1: "#ffffff",
-            content2: "#374151",
-            content3: "#6b7280",
+            content1: "#f1f3f5",    // 更柔和的卡片背景色
+            content2: "#4A5568",    // 更柔和的次要文字
+            content3: "#718096",    // 更柔和的辅助文字
             focus: "#AFB42B",
           }
         },

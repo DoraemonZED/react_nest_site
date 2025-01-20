@@ -1,6 +1,7 @@
 // originally written by @imoaazahmed
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { create } from 'zustand';
 
 const ThemeProps = {
   key: "theme",
@@ -10,12 +11,22 @@ const ThemeProps = {
 
 type Theme = typeof ThemeProps.light | typeof ThemeProps.dark;
 
-export const useTheme = (defaultTheme?: Theme) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
+// Create a Zustand store
+const useThemeStore = create<{
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+}>((set) => ({
+  theme: (localStorage.getItem(ThemeProps.key) as Theme) || ThemeProps.light,
+  setTheme: (theme: Theme) => {
+    localStorage.setItem(ThemeProps.key, theme);
+    document.documentElement.classList.remove(ThemeProps.light, ThemeProps.dark);
+    document.documentElement.classList.add(theme);
+    set({ theme });
+  },
+}));
 
-    return storedTheme || (defaultTheme ?? ThemeProps.light);
-  });
+export const useTheme = (defaultTheme?: Theme) => {
+  const { theme, setTheme } = useThemeStore();
 
   const isDark = useMemo(() => {
     return theme === ThemeProps.dark;
@@ -25,26 +36,16 @@ export const useTheme = (defaultTheme?: Theme) => {
     return theme === ThemeProps.light;
   }, [theme]);
 
-  const _setTheme = (theme: Theme) => {
-    localStorage.setItem(ThemeProps.key, theme);
-    document.documentElement.classList.remove(
-      ThemeProps.light,
-      ThemeProps.dark,
-    );
-    document.documentElement.classList.add(theme);
-    setTheme(theme);
-  };
+  const setLightTheme = () => setTheme(ThemeProps.light);
 
-  const setLightTheme = () => _setTheme(ThemeProps.light);
-
-  const setDarkTheme = () => _setTheme(ThemeProps.dark);
+  const setDarkTheme = () => setTheme(ThemeProps.dark);
 
   const toggleTheme = () =>
     theme === ThemeProps.dark ? setLightTheme() : setDarkTheme();
 
   useEffect(() => {
-    _setTheme(theme);
-  });
+    setTheme(theme);
+  }, [theme, setTheme]);
 
   return { theme, isDark, isLight, setLightTheme, setDarkTheme, toggleTheme };
 };
