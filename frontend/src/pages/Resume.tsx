@@ -111,7 +111,7 @@ export default function Resume(){
     
     return (
       <>
-      <div className="banner" id="HOME" style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}></div>
+      <div className="banner" id="HOME"></div>
       <div className="container">
           <div className="main_box">
               <div className="visitingCard">

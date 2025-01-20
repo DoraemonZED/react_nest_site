@@ -22,8 +22,8 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path ? 'text-primary' : 'text-foreground';
 
   return (
-    <div className="relative">
-      <div className="p-2.5">
+    <div className="relative z-[100]">
+      <div className="py-2.5">
         <Card className="backdrop-blur-sm bg-content1/80">
           <div className="p-4">
             <div className="flex justify-between items-center max-w-5xl px-6 mx-auto">
@@ -85,7 +85,7 @@ const Navbar = () => {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.2 }}
             className="absolute w-full px-2.5 md:hidden"
-            style={{ top: "100%" }}
+            style={{ top: "100%", zIndex: 100 }}
           >
             <Card className="backdrop-blur-sm bg-content1/90">
               <div className="p-4">
