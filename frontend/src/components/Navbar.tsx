@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@heroui/button";
 import { Avatar } from "@heroui/avatar";
 import { Card } from "@heroui/card";
@@ -13,10 +13,13 @@ import HamburgerButton from './HamburgerButton';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const isActive = (path: string) => location.pathname === path ? 'text-primary' : 'text-foreground';
 
   return (
     <div className="relative">
@@ -33,10 +36,10 @@ const Navbar = () => {
 
               {/* 导航链接 - 中等屏幕以上显示 */}
               <div className="hidden md:flex items-center gap-4">
-                <Link to="/" className="text-foreground hover:text-primary">首页</Link>
-                <Link to="/blog" className="text-foreground hover:text-primary">博客</Link>
-                <Link to="/game" className="text-foreground hover:text-primary">游戏</Link>
-                <Link to="/resume" className="text-foreground hover:text-primary">简历</Link>
+                <Link to="/" className={`${isActive('/')}`}>首页</Link>
+                <Link to="/blog" className={`${isActive('/blog')}`}>博客</Link>
+                <Link to="/game" className={`${isActive('/game')}`}>游戏</Link>
+                <Link to="/resume" className={`${isActive('/resume')}`}>简历</Link>
                 
                 {/* 主题切换开关 */}
                 <ThemeSwitch />
@@ -92,10 +95,10 @@ const Navbar = () => {
                   transition={{ delay: 0.1 }}
                   className="flex flex-col items-center gap-4"
                 >
-                  <Link to="/" className="text-foreground hover:text-primary" onClick={toggleMenu}>首页</Link>
-                  <Link to="/blog" className="text-foreground hover:text-primary" onClick={toggleMenu}>博客</Link>
-                  <Link to="/game" className="text-foreground hover:text-primary" onClick={toggleMenu}>游戏</Link>
-                  <Link to="/resume" className="text-foreground hover:text-primary" onClick={toggleMenu}>简历</Link>
+                  <Link to="/" className={`${isActive('/')}`} onClick={toggleMenu}>首页</Link>
+                  <Link to="/blog" className={`${isActive('/blog')}`} onClick={toggleMenu}>博客</Link>
+                  <Link to="/game" className={`${isActive('/game')}`} onClick={toggleMenu}>游戏</Link>
+                  <Link to="/resume" className={`${isActive('/resume')}`} onClick={toggleMenu}>简历</Link>
                   <div className="flex items-center gap-4">
                     <ThemeSwitch />
                     <Button
