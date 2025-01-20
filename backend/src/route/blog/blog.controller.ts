@@ -17,6 +17,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import {FileInterceptor, FilesInterceptor} from "@nestjs/platform-express";
 import {ApiBody, ApiOperation} from "@nestjs/swagger";
 import {SaveOriginImgDto} from "./dto/save-origin-img.dto";
+import { ResultData } from 'src/common/utils/result';
 
 @Controller('blog')
 export class BlogController {
@@ -25,7 +26,8 @@ export class BlogController {
   @Get()
   @ApiOperation({ summary: '获取所有分类' })
   async getList() {
-    return await this.blogService.getAllList()
+    const list = await this.blogService.getAllList()
+    return ResultData.ok(list)
   }
 
   @Post()

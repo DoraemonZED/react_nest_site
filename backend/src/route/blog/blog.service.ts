@@ -18,8 +18,9 @@ export class BlogService {
   async getAllList() {
     // const itemValue =
     // return await this.blogItem.find({select: {title: true}})
-    this.blogItem.createQueryBuilder()
-        .leftJoinAndSelect("user", "user")
+    // this.blogItem.createQueryBuilder()
+    //     .leftJoinAndSelect("user", "user")
+    return await this.blogMenu.find({select: ['blogItem', 'category', 'id', 'sort', 'name']})
   }
   
   /**
