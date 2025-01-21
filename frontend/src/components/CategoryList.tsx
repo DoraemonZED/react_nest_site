@@ -39,7 +39,6 @@ export default function CategoryList({ categories, loading, error }: CategoryLis
                 <FadeIn 
                   key={category.id}
                   delay={index * 0.1}
-                  direction="up"
                 >
                   <Card
                     isPressable

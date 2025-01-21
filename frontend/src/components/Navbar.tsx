@@ -22,8 +22,8 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path ? 'text-primary' : 'text-foreground';
 
   return (
-    <div className="relative z-[100]">
-      <div className="py-2.5">
+    <div className="sticky top-0 z-[50]">
+      <div className="pb-2.5 pt-1 px-1">
         <Card className="backdrop-blur-sm bg-content1/80">
           <div className="p-4">
             <div className="flex justify-between items-center max-w-5xl px-6 mx-auto">

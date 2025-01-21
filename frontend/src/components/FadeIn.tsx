@@ -5,48 +5,32 @@ import { ReactNode } from 'react';
 interface FadeInProps {
   children: ReactNode;
   className?: string;
-  direction?: 'up' | 'down' | 'left' | 'right';
   delay?: number;
   duration?: number;
   once?: boolean;
+  scale?: number;
 }
-
-type DirectionOffset = {
-  y?: number;
-  x?: number;
-};
-
-const directions: Record<NonNullable<FadeInProps['direction']>, DirectionOffset> = {
-  up: { y: 20 },
-  down: { y: -20 },
-  left: { x: 20 },
-  right: { x: -20 }
-};
 
 export function FadeIn({
   children,
   className = '',
-  direction = 'up',
   delay = 0,
   duration = 0.5,
-  once = true
+  once = true,
+  scale = 0.9
 }: FadeInProps) {
   const { ref, isInView } = useInView({ once });
-  
-  const directionOffset = directions[direction];
   
   return (
     <motion.div
       ref={ref as React.Ref<HTMLDivElement>}
       initial={{
         opacity: 0,
-        ...directionOffset
+        scale: scale
       }}
       animate={{
         opacity: isInView ? 1 : 0,
-        ...isInView 
-          ? { x: 0, y: 0 }
-          : directionOffset
+        scale: isInView ? 1 : scale
       }}
       transition={{
         duration,

@@ -1,17 +1,14 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from "@heroui/card";
 import { FadeIn } from './FadeIn';
-import { Divider } from "@heroui/divider";
 
 const Footer = () => {
   return (
     <FadeIn
-      direction="up"
       delay={0.5}
       duration={0.5}
     >
-      <div className="p-2.5">
+      <div className="py-2.5">
       <Card>
         <div className="p-4">
           <div className="text-center text-default-500">

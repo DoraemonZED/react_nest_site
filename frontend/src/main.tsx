@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import { Provider } from "@/components/provider.tsx";
 import "@/styles/globals.css";
+import "@/assets/iconfont/iconfont.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

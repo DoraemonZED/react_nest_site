@@ -1,6 +1,6 @@
-import React from 'react';
 import { Button } from '@heroui/react';
 import { message } from '@/utils/message';
+import Footer from '@/components/Footer';
 
 const Home = () => {
 
@@ -12,6 +12,7 @@ const Home = () => {
   }
   
   return (
+    <>
     <div>
       <h1>首页</h1>
       <div className='flex justify-center items-center h-screen gap-4 flex-wrap'>
@@ -26,6 +27,9 @@ const Home = () => {
         <Button className='bg-content3'>content3</Button>
       </div>
     </div>
+    <Footer />
+    </>
+    
   );
 };
 
