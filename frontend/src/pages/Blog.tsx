@@ -2,16 +2,13 @@ import { Card, Button, Drawer, DrawerContent, DrawerBody, DrawerFooter } from "@
 import CategoryList from "@/components/CategoryList";
 import { blogApi } from '@/services/blogApi';
 import { CategoryResponse } from '@/types';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
+import { Outlet } from 'react-router-dom';
 
-interface BlogLayoutProps {
-  children: React.ReactNode
-}
 
-export default function Blog({ children }: BlogLayoutProps) {
+export default function Blog() {
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -27,10 +24,10 @@ export default function Blog({ children }: BlogLayoutProps) {
   }, []);
 
   return (
-    <div className="relative mx-auto">
+    <div className="container relative mx-auto">
       {/* 中屏显示的菜单按钮 */}
       <Button
-        className="fixed left-0 top-28 md:hidden z-40"
+        className="fixed left-0 top-28 lg:hidden z-40"
         isIconOnly
         variant="light"
         onPress={() => setIsDrawerOpen(true)}
@@ -71,7 +68,7 @@ export default function Blog({ children }: BlogLayoutProps) {
                 <CategoryList
                   categories={categories}
                   loading={isLoading}
-                  error={error}
+                  error={null}
                 />
               </DrawerBody>
             </>
@@ -79,20 +76,22 @@ export default function Blog({ children }: BlogLayoutProps) {
         </DrawerContent>
       </Drawer>
 
-      <div className="md:flex md:flex-row">
+      <div className="lg:flex lg:flex-row">
         {/* 大屏显示的侧边栏 */}
-        <div className="hidden md:block sticky top-20 md:self-start">
-          <Card className="h-[calc(100vh-95px)] w-[280px] overflow-y-auto styled-scrollbar p-2 box-border" data-lenis-prevent>
+        <div className="hidden lg:block sticky top-[5.35rem] lg:self-start">
+          <Card className="h-[calc(100vh-6rem)] w-[280px] overflow-y-auto styled-scrollbar p-2 box-border" data-lenis-prevent>
             <CategoryList
               categories={categories}
               loading={isLoading}
-              error={error}
+              error={null}
             />
           </Card>
         </div>
         {/* 右侧文章内容 */}
-        <div className="flex-1 md:ml-2">
-          <Card className="h-[1000px]">{children}</Card>
+        <div className="flex-1 lg:ml-2">
+          <Card className="min-h-[calc(100vh-12rem)]">
+            <Outlet />
+          </Card>
           <Footer />
         </div>
       </div>

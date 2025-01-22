@@ -13,7 +13,7 @@ const Home = () => {
   
   return (
     <>
-    <div>
+    <div className="container mx-auto">
       <h1>首页</h1>
       <div className='flex justify-center items-center h-screen gap-4 flex-wrap'>
         <Button onPress={showMessage}>未设置</Button>

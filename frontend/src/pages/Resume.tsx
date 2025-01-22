@@ -1,5 +1,4 @@
 import { useLayoutEffect, useState, useEffect, useRef } from "react";
-import '@/styles/new.css'
 /*
 TODO: 
     1.轮播图和页面滚动防抖
