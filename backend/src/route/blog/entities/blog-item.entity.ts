@@ -16,7 +16,7 @@ export class BlogItemEntity {
 
   @ApiProperty({ type: String, description: '内容' })
   @Expose()
-  @Column({ type: 'varchar', comment: '内容' })
+  @Column({ type: 'longtext', comment: '内容' })
   public content: string
 
   @ManyToOne(() => BlogMenuEntity, blog => blog.blogItem, {
@@ -26,5 +26,5 @@ export class BlogItemEntity {
     createForeignKeyConstraints: true
   })
   @Expose()
-  public group: BlogMenuEntity
+  public menu: BlogMenuEntity
 }

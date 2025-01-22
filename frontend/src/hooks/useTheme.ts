@@ -1,9 +1,7 @@
-// originally written by @imoaazahmed
-
 import { useEffect, useMemo } from "react";
-import { useThemeStore, ThemeProps, Theme } from '../store/themeStore';
+import { useThemeStore, ThemeProps } from '@/store/themeStore';
 
-export const useTheme = (defaultTheme?: Theme) => {
+export const useTheme = () => {
   const { theme, setTheme } = useThemeStore();
 
   const isDark = useMemo(() => {

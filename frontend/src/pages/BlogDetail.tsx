@@ -1,7 +1,7 @@
 import { Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 
-function BlogDetail(){
+export default function BlogDetail(){
     const navigate = useNavigate();
     return (
         <div>
@@ -10,5 +10,3 @@ function BlogDetail(){
         </div>
     )
 }
-
-export default BlogDetail;

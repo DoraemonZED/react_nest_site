@@ -21,6 +21,6 @@ export class BlogMenuEntity {
   @Expose()
   public category: string
 
-  @OneToMany(() => BlogItemEntity, item => item.group)
+  @OneToMany(() => BlogItemEntity, item => item.menu)
   public blogItem: BlogItemEntity[]
 }

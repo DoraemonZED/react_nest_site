@@ -3,11 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@heroui/button";
 import { Avatar } from "@heroui/avatar";
 import { Card } from "@heroui/card";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { ThemeSwitch } from "@/components/ThemeSwitch.tsx";
 import {
   GithubIcon,
   MessageIcon
-} from "@/components/icons";
+} from "@/components/Icons.tsx";
 import { motion, AnimatePresence } from 'framer-motion';
 import HamburgerButton from './HamburgerButton';
 

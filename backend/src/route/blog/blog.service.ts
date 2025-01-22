@@ -16,11 +16,22 @@ export class BlogService {
   ) {}
 
   async getAllList() {
-    // const itemValue =
-    // return await this.blogItem.find({select: {title: true}})
-    // this.blogItem.createQueryBuilder()
-    //     .leftJoinAndSelect("user", "user")
-    return await this.blogMenu.find({select: ['blogItem', 'category', 'id', 'sort', 'name']})
+    // 查询所有blogMenu和关联的blogItem的数量
+    return await this.blogMenu.createQueryBuilder('blogMenu')
+      .leftJoinAndSelect('blogMenu.blogItem', 'blogItem')
+      .getCount()
+      .then(async (count) => {
+        // 查询所有blogMenu
+        const blogMenuList = await this.blogMenu.find({
+          relations: {
+            blogItem: true
+          }
+        })
+        return {
+          blogMenuList,
+          count
+        }
+      })
   }
   
   /**
