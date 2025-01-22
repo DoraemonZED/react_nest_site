@@ -3,6 +3,7 @@
 import { Card, CardBody } from "@heroui/react";
 import { FadeIn } from '@/components/FadeIn';
 import { CategoryResponse } from '@/types';
+import { useNavigate } from "react-router-dom";
 
 interface CategoryListProps {
   categories: CategoryResponse[];
@@ -11,6 +12,8 @@ interface CategoryListProps {
 }
 
 export default function CategoryList({ categories, loading, error }: CategoryListProps) {
+  const navigate = useNavigate();
+
   // 按 groupName 对分类进行分组
   const groupedCategories = categories.reduce((acc, category) => {
     if (!acc[category.category]) {
@@ -43,6 +46,7 @@ export default function CategoryList({ categories, loading, error }: CategoryLis
                   <Card
                     isPressable
                     className="bg-content1 hover:bg-content2 w-full"
+                    onPressUp={() => navigate(`/blog/list?categoryId=${category.id}`)}
                   >
                     <CardBody className="py-2 px-4">
                       <div className="flex justify-between items-center">
@@ -50,7 +54,7 @@ export default function CategoryList({ categories, loading, error }: CategoryLis
                           {category.name}
                         </span>
                         <span className="text-small text-default-500">
-                          {category._count?.posts}
+                          {category.count || 0}
                         </span>
                       </div>
                     </CardBody>

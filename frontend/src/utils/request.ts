@@ -1,5 +1,6 @@
 import { loading } from '@/utils/loading';
 import { message } from '@/utils/message';
+import qs from 'qs'; // 假设使用 qs 库来处理查询字符串
 
 // 基础配置
 const BASE_URL = '/api';
@@ -19,6 +20,7 @@ interface ExtendedRequestInit extends RequestInit {
   showError?: boolean;
   responseType?: ResponseType;
   prefix?: string;
+  params?: Record<string, any>; // 添加 params 属性
 }
 
 // API响应接口
@@ -68,6 +70,7 @@ export async function request<T = any>(
     showError = true,
     responseType = ResponseType.JSON,
     prefix = BASE_URL,
+    params = {}, // 默认为空对象
     ...fetchOptions
   } = options;
 
@@ -86,12 +89,26 @@ export async function request<T = any>(
     headers: {
       ...defaultOptions.headers,
       ...fetchOptions.headers,
-    },
+    } as HeadersInit,
   };
 
+  // 处理 GET 请求的 params 参数
+  if (mergedOptions.method === 'GET' && Object.keys(params).length > 0) {
+    url = `${url}?${qs.stringify(params)}`;
+  }
+
   // 处理 POST 请求的 body
-  if (mergedOptions.body && typeof mergedOptions.body === 'object') {
-    mergedOptions.body = JSON.stringify(mergedOptions.body);
+  if (mergedOptions.body) {
+    if (mergedOptions.body instanceof FormData) {
+      // 如果 body 是 FormData，不需要设置 Content-Type
+      mergedOptions.headers = new Headers(mergedOptions.headers as HeadersInit);
+      mergedOptions.headers.delete('Content-Type'); // 删除自动设置的 Content-Type
+    } else if (typeof mergedOptions.body === 'object') {
+      mergedOptions.body = JSON.stringify(mergedOptions.body);
+      const headers = new Headers(mergedOptions.headers as HeadersInit);
+      headers.set('Content-Type', 'application/json');
+      mergedOptions.headers = headers;
+    }
   }
 
   let loadingInstance;
@@ -103,10 +120,10 @@ export async function request<T = any>(
 
     const fullUrl = url.startsWith('http') ? url : `${prefix}${url}`;
     const response = await fetch(fullUrl, mergedOptions);
-    
+
     // 检查响应状态
     checkStatus(response);
-    
+
     // 处理响应数据
     const data = await handleResponse<ApiResponse<T>>(response, responseType);
 
@@ -145,4 +162,4 @@ export const http = {
   delete<T = any>(url: string, options?: ExtendedRequestInit) {
     return request<T>(url, { ...options, method: 'DELETE' });
   },
-}; 
+};

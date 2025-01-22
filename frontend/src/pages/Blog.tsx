@@ -1,4 +1,4 @@
-import { Card, Button, Drawer, DrawerContent, DrawerBody, DrawerFooter } from "@heroui/react";
+import { Card, Button, Drawer, DrawerContent, DrawerBody } from "@heroui/react";
 import CategoryList from "@/components/CategoryList";
 import { blogApi } from '@/services/blogApi';
 import { CategoryResponse } from '@/types';
@@ -14,7 +14,7 @@ export default function Blog() {
 
   useEffect(() => {
     setIsLoading(true);
-    blogApi.getBlogList()
+    blogApi.getBlogMenu()
       .then((data) => {
         setCategories(data as CategoryResponse[] || []);
       })

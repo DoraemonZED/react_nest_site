@@ -9,7 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Header,
-  HttpCode, UploadedFiles, HttpException, Req, Put
+  HttpCode, UploadedFiles, HttpException, Req, Put, Query
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -18,43 +18,47 @@ import {FileInterceptor, FilesInterceptor} from "@nestjs/platform-express";
 import {ApiBody, ApiOperation} from "@nestjs/swagger";
 import {SaveOriginImgDto} from "./dto/save-origin-img.dto";
 import { ResultData } from 'src/common/utils/result';
+import { PageDto } from './dto/page.dto';
 
 @Controller('blog')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
-  @Get()
-  @ApiOperation({ summary: '获取所有分类' })
+  @Get('menu')
+  @ApiOperation({ summary: '获取所有menu' })
   async getList() {
-    const list = await this.blogService.getAllList()
-    return ResultData.ok(list)
+    return ResultData.ok(await this.blogService.getAllMenu())
   }
 
-  @Post()
-  @ApiOperation({ summary: '创建分类' })
+  @Post('menu')
+  @ApiOperation({ summary: '创建menu' })
   creatList(@Body() createBlogDto: CreateBlogDto) {
     return ''
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: '删除分类' })
+  @Delete('menu/:id')
+  @ApiOperation({ summary: '删除menu' })
   deleteList(@Body() createBlogDto: CreateBlogDto) {
     return ''
   }
 
-  @Post(':id')
-  @ApiOperation({ summary: '创建博客' })
+  @Get('list/:id')
+  @ApiOperation({ summary: '根据menuId获取博客列表' })
   @HttpCode(200)
-  create(@Body() createBlogDto: CreateBlogDto) {
-    return ''
+  async getBlogList(
+    @Param('id') id: string,
+    @Query() pageDto: PageDto
+  ) {
+    return ResultData.ok(await this.blogService.getBlogList(id, pageDto.pageSize, pageDto.pageNum))
   }
 
-  @Put(':id')
+  @Put('list/:id')
   @ApiOperation({ summary: '编辑博客' })
   @HttpCode(200)
   edit(@Body() createBlogDto: CreateBlogDto) {
     return ''
   }
+
   
   @Post('uploadImg')
   @HttpCode(200)

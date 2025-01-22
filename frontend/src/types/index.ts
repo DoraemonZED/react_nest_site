@@ -9,7 +9,14 @@ export interface CategoryResponse {
   category: string;
   name: string;
   sort: number;
-  _count: {
-    posts: number;
-  };
+  count: number
+}
+
+export interface BlogListReqListParams {
+  pageNum: number;
+  pageSize: number;
+}
+export interface BlogListResponse{
+  list: any[];
+  total: number
 }

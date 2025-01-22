@@ -2,9 +2,21 @@
 
 import { Card, CardBody, Pagination } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {blogApi} from "@/services/blogApi.ts";
 
 export default function BlogList() {
   const navigate = useNavigate();
+  const pageSize = 10;
+  const [pageNum, setPageNum] = useState(1);
+
+  useEffect(() => {
+    blogApi.getBlogList({pageSize, pageNum}, '1')
+      .then((data) => {
+        console.log(data)
+      })
+    setPageNum(1)
+  }, [])
 
   const handleClick = (id: number) => {
     navigate(`/blog/detail/${id}`);

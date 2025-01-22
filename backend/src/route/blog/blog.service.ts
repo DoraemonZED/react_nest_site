@@ -15,25 +15,52 @@ export class BlogService {
       @InjectRepository(BlogMenuEntity) private readonly blogMenu: Repository<BlogMenuEntity>,
   ) {}
 
-  async getAllList() {
-    // 查询所有blogMenu和关联的blogItem的数量
+  /**
+   * @description 查询所有blogMenu和关联的blogItem的数量
+   * @return 博客菜单列表
+   */
+  async getAllMenu() {
     return await this.blogMenu.createQueryBuilder('blogMenu')
       .leftJoinAndSelect('blogMenu.blogItem', 'blogItem')
-      .getCount()
-      .then(async (count) => {
-        // 查询所有blogMenu
-        const blogMenuList = await this.blogMenu.find({
-          relations: {
-            blogItem: true
-          }
-        })
-        return {
-          blogMenuList,
-          count
-        }
-      })
+      .select([
+        'blogMenu.id as id',
+        'blogMenu.sort as sort',
+        'blogMenu.name as name',
+        'blogMenu.category as category',
+        'COUNT(blogItem.id) as count'
+      ])
+      .groupBy('blogMenu.id')
+      .getRawMany();
   }
   
+  /**
+   * @description 获取博客列表
+   * @param id 博客菜单id
+   * @param pageSize 页大小
+   * @param pageNum 页码
+   * @return 博客列表
+   */
+  async getBlogList(id: string, pageSize: number, pageNum: number) {
+    const skip = (pageNum - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      this.blogItem.find({
+        where: { menu: { id } },
+        skip,
+        take: pageSize,
+      }),
+      this.blogItem.count({
+        where: { menu: { id } }
+      })
+    ]);
+
+    return {
+      items,
+      total,
+      pageSize,
+      pageNum
+    };
+  }
+
   /**
    * @description 保存文件至目录
    * @param files 文件

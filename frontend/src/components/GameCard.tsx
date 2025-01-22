@@ -18,7 +18,7 @@ export default function GameCard({ title, description, imageUrl, htmlPath }: Gam
     <Card 
       isPressable 
       isHoverable
-      onPress={handlePress}
+      onPressUp={handlePress}
       className="w-full h-full"
       classNames={{
         base: "transition-transform active:scale-95 hover:scale-105",
