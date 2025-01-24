@@ -15,8 +15,8 @@ function App() {
       <Route element={<DefaultLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/blog" element={<Blog />} >
-          <Route index element={<BlogList />} />
-          <Route path="detail/:id" element={<BlogDetail />} />
+          <Route path=":menuId" element={<BlogList />} />
+          <Route path=":menuId/:listId" element={<BlogDetail />} />
         </Route>
         <Route path="/game" element={<Game />} />
         <Route path="/resume" element={<Resume />} />

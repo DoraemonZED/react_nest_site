@@ -16,7 +16,14 @@ export interface BlogListReqListParams {
   pageNum: number;
   pageSize: number;
 }
-export interface BlogListResponse{
-  list: any[];
+export interface BlogListItems {
+  content: string;
+  id: number;
+  title: string;
+}
+export interface BlogListResponse {
+  items: BlogListItems[]
   total: number
+  pageSize: number
+  pageNum: number
 }

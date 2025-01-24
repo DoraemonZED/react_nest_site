@@ -46,7 +46,7 @@ export default function CategoryList({ categories, loading, error }: CategoryLis
                   <Card
                     isPressable
                     className="bg-content1 hover:bg-content2 w-full"
-                    onPressUp={() => navigate(`/blog/list?categoryId=${category.id}`)}
+                    onPress={() => navigate(`/blog/${category.id}`)}
                   >
                     <CardBody className="py-2 px-4">
                       <div className="flex justify-between items-center">
