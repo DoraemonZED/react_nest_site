@@ -23,17 +23,18 @@ export default function BlogList() {
       .then((data) => {
         setBlogList(data.items)
         setPageNum(data.pageNum)
-        setTotal(data.total % 10)
+        setTotal(Math.ceil(data.total / 10))
       })
     setPageNum(1)
   }, [navigate])
 
   const handleClick = (id: number) => {
-    navigate(`/blog/1/${id}`);
+    navigate(`/blog/${menuId}/${id}`);
   }
 
   return (
     <div className="flex px-10 py-5 flex-col items-center">
+      <span className="iconfont icon"></span>
       <main className="flex-1 w-full mb-10">
         <div className="grid gap-4">
           {blogList.map((item) => (
@@ -53,7 +54,7 @@ export default function BlogList() {
           ))}
         </div>
       </main>
-      <Pagination initialPage={pageNum} total={total} color="primary"/>
+      <Pagination page={pageNum} total={total} color="primary"/>
     </div>
   );
 } 
