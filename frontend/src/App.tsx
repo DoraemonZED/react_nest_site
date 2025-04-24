@@ -7,6 +7,7 @@ import Resume from "@/pages/Resume";
 import Error from "@/pages/Error";
 import BlogList from "@/pages/BlogList";
 import BlogDetail from "@/pages/BlogDetail";
+import EditorLayout from "@/layouts/EditorLayout.tsx";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
         <Route path="/game" element={<Game />} />
         <Route path="/resume" element={<Resume />} />
       </Route>
-      
+      {/* 编辑页面 */}
+      <Route path="/editor" element={<EditorLayout />} />
       {/* 404页面使用错误布局 */}
       <Route path="*" element={<Error />} />
     </Routes>

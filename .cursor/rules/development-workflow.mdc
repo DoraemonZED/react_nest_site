@@ -1,0 +1,41 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Development Workflow
+
+## Getting Started
+1. Clone the repository
+2. Install dependencies:
+   - Frontend: Run `npm install` in the `frontend` directory
+   - Backend: Run `npm install` in the `backend` directory
+
+## Development
+- Frontend development server: `npm run dev` in `frontend` directory
+- Backend development server: `npm run start:dev` in `backend` directory
+- Use Docker for consistent development environment
+
+## Code Organization
+- Keep related files close together
+- Follow the established directory structure
+- Create new components in appropriate directories
+- Update documentation when adding new features
+
+## Version Control
+- Create feature branches from `main`
+- Keep commits focused and atomic
+- Write descriptive commit messages
+- Review code before merging
+
+## Testing
+- Write tests for new features
+- Run tests before committing
+- Ensure all tests pass before merging
+- Follow test naming conventions
+
+## Deployment
+- Use Docker for containerization
+- Follow the deployment checklist
+- Test in staging environment first
+- Monitor logs after deployment

@@ -1,0 +1,33 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Structure Guide
+
+This is a full-stack web application built with React (frontend) and NestJS (backend).
+
+## Frontend Structure ([frontend/src/main.tsx](mdc:frontend/src/main.tsx))
+- `components/`: Reusable React components
+- `pages/`: Page-level components and routes
+- `layouts/`: Layout components and templates
+- `services/`: API service integrations
+- `store/`: State management
+- `hooks/`: Custom React hooks
+- `utils/`: Utility functions
+- `types/`: TypeScript type definitions
+- `styles/`: Global styles and theme
+- `assets/`: Static assets
+- `config/`: Configuration files
+
+## Backend Structure ([backend/src/main.ts](mdc:backend/src/main.ts))
+- `route/`: API route handlers
+- `auth/`: Authentication and authorization
+- `common/`: Shared utilities and middleware
+- `config/`: Configuration modules
+- `log4js/`: Logging configuration
+
+## Key Files
+- Frontend Entry: [frontend/src/main.tsx](mdc:frontend/src/main.tsx)
+- Backend Entry: [backend/src/main.ts](mdc:backend/src/main.ts)
+- App Module: [backend/src/app.module.ts](mdc:backend/src/app.module.ts)
