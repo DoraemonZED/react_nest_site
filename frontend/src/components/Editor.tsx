@@ -2,7 +2,6 @@ import { useEffect, useRef, useCallback } from "react";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 import { imageService } from "../services/imageService";
-import debounce from 'lodash/debounce';
 
 interface EditorProps {
   value?: string;
@@ -22,7 +21,7 @@ interface UploadResult {
 export function Editor({ 
   value = "", 
   onChange, 
-  height = "400px",
+  height = "100vh",
   placeholder = "Please enter content...",
   articleId
 }: EditorProps) {
@@ -76,15 +75,15 @@ export function Editor({
   }, []);
 
   // 防抖处理内容变化
-  const debouncedContentChange = useCallback(
-    debounce((newContent: string) => {
-      const oldContent = previousContentRef.current;
-      checkDeletedImages(newContent, oldContent);
-      previousContentRef.current = newContent;
-      onChange?.(newContent);
-    }, 500),
-    [onChange, checkDeletedImages]
-  );
+  // const debouncedContentChange = useCallback(
+  //   debounce((newContent: string) => {
+  //     const oldContent = previousContentRef.current;
+  //     checkDeletedImages(newContent, oldContent);
+  //     previousContentRef.current = newContent;
+  //     onChange?.(newContent);
+  //   }, 500),
+  //   [onChange, checkDeletedImages]
+  // );
 
   useEffect(() => {
     const element = editorRef.current;
@@ -118,7 +117,7 @@ export function Editor({
           vditorRef.current.setValue(processedText);
           return;
         }
-        debouncedContentChange(processedText);
+        // debouncesdContentChange(processedText);
       },
       toolbar: [
         "emoji",
@@ -160,13 +159,13 @@ export function Editor({
     });
 
     return () => {
-      debouncedContentChange.cancel();
+      // debouncedContentChange.cancel();
       if (vditorRef.current) {
         vditorRef.current.destroy();
         vditorRef.current = undefined;
       }
     };
-  }, [height, placeholder, handleImageUrl, debouncedContentChange, value]);
+  }, [height, placeholder, handleImageUrl, value]);
 
   // 提供验证图片的方法
   const validateImages = useCallback(async () => {
@@ -179,7 +178,8 @@ export function Editor({
   return (
     <div 
       ref={editorRef} 
-      style={{ width: '100%' }}
+      style={{ width: '100%', height: '100vh' }}
+      className="w-full h-full"
     />
   );
 }
