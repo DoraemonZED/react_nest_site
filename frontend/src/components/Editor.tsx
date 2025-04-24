@@ -32,7 +32,7 @@ export function Editor({
 
   // 处理图片URL的粘贴和输入
   const handleImageUrl = useCallback(async (text: string) => {
-    const imgRegex = /!\[.*?\]\((http[s]?:\/\/.*?)\)/g;
+    const imgRegex = /!\[.*?]\((http[s]?:\/\/.*?)\)/g;
     let match;
     let newText = text;
     
@@ -52,7 +52,7 @@ export function Editor({
   // 检测删除的图片
   const checkDeletedImages = useCallback((newContent: string, oldContent: string) => {
     const getImageUrls = (content: string) => {
-      const regex = /!\[.*?\]\((.*?)\)/g;
+      const regex = /!\[.*?]\((.*?)\)/g;
       const urls = new Set<string>();
       let match;
       while ((match = regex.exec(content)) !== null) {
