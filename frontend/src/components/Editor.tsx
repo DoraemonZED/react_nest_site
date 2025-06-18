@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 import { imageService } from "../services/imageService";
+import { debounce } from "lodash";
 
 interface EditorProps {
   value?: string;
@@ -18,13 +19,13 @@ interface UploadResult {
   }>;
 }
 
-export function Editor({ 
-  value = "", 
-  onChange, 
-  height = "100vh",
-  placeholder = "Please enter content...",
-  articleId
-}: EditorProps) {
+export function Editor({
+                         value = "",
+                         onChange,
+                         height = "100vh",
+                         placeholder = "Please enter content...",
+                         articleId
+                       }: EditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const vditorRef = useRef<Vditor>();
   const previousContentRef = useRef<string>(value);
@@ -34,7 +35,7 @@ export function Editor({
     const imgRegex = /!\[.*?]\((http[s]?:\/\/.*?)\)/g;
     let match;
     let newText = text;
-    
+
     while ((match = imgRegex.exec(text)) !== null) {
       try {
         const imageUrl = match[1];
@@ -44,7 +45,7 @@ export function Editor({
         console.error('Failed to download image:', error);
       }
     }
-    
+
     return newText;
   }, []);
 
@@ -75,15 +76,15 @@ export function Editor({
   }, []);
 
   // 防抖处理内容变化
-  // const debouncedContentChange = useCallback(
-  //   debounce((newContent: string) => {
-  //     const oldContent = previousContentRef.current;
-  //     checkDeletedImages(newContent, oldContent);
-  //     previousContentRef.current = newContent;
-  //     onChange?.(newContent);
-  //   }, 500),
-  //   [onChange, checkDeletedImages]
-  // );
+  const debouncedContentChange = useCallback(
+    debounce((newContent: string) => {
+      const oldContent = previousContentRef.current;
+      checkDeletedImages(newContent, oldContent);
+      previousContentRef.current = newContent;
+      onChange?.(newContent);
+    }, 500),
+    [onChange, checkDeletedImages]
+  );
 
   useEffect(() => {
     const element = editorRef.current;
@@ -117,7 +118,7 @@ export function Editor({
           vditorRef.current.setValue(processedText);
           return;
         }
-        // debouncesdContentChange(processedText);
+        debouncedContentChange(processedText);
       },
       toolbar: [
         "emoji",
@@ -176,8 +177,8 @@ export function Editor({
   }, [articleId]);
 
   return (
-    <div 
-      ref={editorRef} 
+    <div
+      ref={editorRef}
       style={{ width: '100%', height: '100vh' }}
       className="w-full h-full"
     />

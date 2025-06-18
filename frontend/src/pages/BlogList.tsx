@@ -1,10 +1,7 @@
-'use client';
-
 import { Card, CardBody, Pagination } from "@heroui/react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {blogApi} from "@/services/blogApi.ts";
-import {BlogListItems} from "@/types";
+import {BlogListItems, blogService} from "@/services/blogService.ts";
 
 export default function BlogList() {
   const navigate = useNavigate();
@@ -19,7 +16,7 @@ export default function BlogList() {
   }
 
   useEffect(() => {
-    blogApi.getBlogList({pageSize, pageNum}, menuId)
+    blogService.getBlogList({pageSize, pageNum}, menuId)
       .then((data) => {
         setBlogList(data.items)
         setPageNum(data.pageNum)

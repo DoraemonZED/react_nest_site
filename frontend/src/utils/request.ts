@@ -27,7 +27,7 @@ interface ExtendedRequestInit extends RequestInit {
 interface ApiResponse<T = any> {
   message?: string;
   data?: T;
-  code?: number;
+  code: number;
   [key: string]: any;
 }
 
@@ -64,7 +64,7 @@ function checkStatus(response: Response): void {
 export async function request<T = any>(
   url: string,
   options: ExtendedRequestInit = {}
-): Promise<T> {
+): Promise<ApiResponse<T>> {
   const {
     showLoading = true,
     showError = true,
@@ -129,19 +129,14 @@ export async function request<T = any>(
 
     // 处理业务逻辑错误
     if (data.code && data.code !== 200) {
-      throw new Error(data.message || '请求失败');
+      new Error(data.message || '请求失败');
     }
-
-    return data.data as T;
+    return data;
   } catch (error) {
-    if (showError) {
-      message.error(error instanceof Error ? error.message : '请求失败');
-    }
-    throw error;
+    showError && message.error(error instanceof Error ? error.message : '请求失败');
+    return {code: 50001, data: undefined};
   } finally {
-    if (loadingInstance) {
-      loadingInstance.close();
-    }
+    loadingInstance && loadingInstance.close();
   }
 }
 

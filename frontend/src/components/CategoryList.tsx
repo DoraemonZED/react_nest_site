@@ -1,9 +1,7 @@
-'use client';
-
 import { Card, CardBody } from "@heroui/react";
 import { FadeIn } from '@/components/FadeIn';
-import { CategoryResponse } from '@/types';
 import { useNavigate } from "react-router-dom";
+import {CategoryResponse} from "@/services/blogService.ts";
 
 interface CategoryListProps {
   categories: CategoryResponse[];

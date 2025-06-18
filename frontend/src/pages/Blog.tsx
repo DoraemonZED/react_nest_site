@@ -1,7 +1,6 @@
 import { Card, Button, Drawer, DrawerContent, DrawerBody } from "@heroui/react";
 import CategoryList from "@/components/CategoryList";
-import { blogApi } from '@/services/blogApi';
-import { CategoryResponse } from '@/types';
+import {blogService, CategoryResponse} from '@/services/blogService.ts';
 import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 import { Outlet } from 'react-router-dom';
@@ -14,9 +13,9 @@ export default function Blog() {
 
   useEffect(() => {
     setIsLoading(true);
-    blogApi.getBlogMenu()
+    blogService.getBlogMenu()
       .then((data) => {
-        setCategories(data as CategoryResponse[] || []);
+        setCategories(data || []);
       })
       .finally(() => {
         setIsLoading(false);
