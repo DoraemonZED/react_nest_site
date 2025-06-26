@@ -2,10 +2,12 @@ import { http } from "@/utils/request";
 
 export interface CategoryResponse {
   id: number;
-  category: string;
+  groupName: string;
   name: string;
   sort: number;
-  count: number
+  _count: {
+    blog_post: number
+  }
 }
 
 export interface BlogListResponse {
