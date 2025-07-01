@@ -5,35 +5,30 @@ import { FadeIn } from "@/components/FadeIn";
 import { CategoryResponse } from "@/services/blogService.ts";
 
 interface CategoryListProps {
-  categories: CategoryResponse[];
-  loading: boolean;
-  error: string | null;
+  categories: CategoryResponse[]
+  loading: boolean
 }
 
 export default function CategoryList({
   categories,
-  loading,
-  error,
+  loading
 }: CategoryListProps) {
   const navigate = useNavigate();
 
   // 按 groupName 对分类进行分组
   const groupedCategories = categories.reduce(
     (acc, category) => {
-      console.log(acc, category);
-
       if (!acc[category.groupName]) {
         acc[category.groupName] = [];
       }
       acc[category.groupName].push(category);
-
       return acc;
     },
     {} as Record<string, CategoryResponse[]>,
   );
 
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
+  const handleClick = (id: number) => {
+    navigate(`/blog/${id}`)
   }
 
   return (
@@ -47,11 +42,7 @@ export default function CategoryList({
             <div className="space-y-2">
               {categories.map((category, index) => (
                 <FadeIn key={category.id} delay={index * 0.1}>
-                  <Card
-                    isPressable
-                    className="bg-content1 hover:bg-content2 w-full"
-                    onPress={() => navigate(`/blog/${category.id}`)}
-                  >
+                  <Card onPress={() => handleClick(category.id)} isPressable className="bg-content1 hover:bg-content2 w-full">
                     <CardBody className="py-2 px-4">
                       <div className="flex justify-between items-center">
                         <span className="text-sm">{category.name}</span>

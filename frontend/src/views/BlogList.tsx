@@ -4,29 +4,33 @@ import {useEffect, useState} from "react";
 import {BlogListItems, blogService} from "@/services/blogService.ts";
 
 export default function BlogList() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const { menuId } = useParams<{ menuId: string }>();
   const [blogList, setBlogList] = useState<BlogListItems[]>([]);
-  const pageSize = 10;
+  const pageSize = 6;
   const [pageNum, setPageNum] = useState(1);
-  const [total, setTotal] = useState(10);
+  const [pageTotal, setPageTotal] = useState(0);
 
   if (!menuId) {
     return null;
   }
 
   useEffect(() => {
-    blogService.getBlogList({pageSize, pageNum}, menuId)
-      .then((data) => {
-        setBlogList(data.items)
-        setPageNum(data.pageNum)
-        setTotal(Math.ceil(data.total / 10))
-      })
-    setPageNum(1)
-  }, [navigate])
+    pageNum === 1 ? getData() : setPageNum(1)
+  }, [menuId])
+
+  useEffect(() => {
+    getData()
+  }, [pageNum])
+
+  const getData = async () => {
+    let data = await blogService.getBlogList({pageSize, pageNum}, menuId)
+    setBlogList(data.data)
+    setPageTotal(data.totalPages)
+  }
 
   const handleClick = (id: number) => {
-    navigate(`/blog/${menuId}/${id}`);
+    navigate(`/blog/${menuId}/${id}`)
   }
 
   return (
@@ -51,7 +55,15 @@ export default function BlogList() {
           ))}
         </div>
       </main>
-      <Pagination page={pageNum} total={total} color="primary"/>
+      {
+        pageTotal !== 0 && <Pagination
+          onChange={(page) => setPageNum(page)}
+          isCompact
+          showControls
+          page={pageNum}
+          total={pageTotal}
+          color="primary"/>
+      }
     </div>
   );
 } 

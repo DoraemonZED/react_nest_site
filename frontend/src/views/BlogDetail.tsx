@@ -1,16 +1,10 @@
-import { useEffect, useRef, useCallback } from "react";
-import Vditor from "vditor";
-// import "vditor/dist/index.css";
+import { Button } from "@heroui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import {useCallback, useEffect, useRef} from "react";
+import { blogService } from "@/services/blogService.ts";
 import { imageService } from "../services/imageService";
-import { debounce } from "lodash";
-
-interface EditorProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  height?: string;
-  placeholder?: string;
-  articleId?: string;
-}
+import Vditor from "vditor";
+import {debounce} from "lodash";
 
 interface UploadResult {
   data: Array<{
@@ -19,17 +13,27 @@ interface UploadResult {
   }>;
 }
 
-export function Editor({
-                         value = "",
-                         onChange,
-                         height = "100vh",
-                         placeholder = "Please enter content...",
-                         articleId
-                       }: EditorProps) {
-  const editorRef = useRef<HTMLDivElement>(null);
+export default function BlogDetail(){
+  const navigate = useNavigate();
+  const { listId } = useParams<{ listId: string }>();
+  const renderDivDom = useRef<HTMLDivElement>(null);
   const vditorRef = useRef<Vditor>();
-  const previousContentRef = useRef<string>(value);
-
+  let blogContent = ''
+  const previousContentRef = useRef<string>(blogContent);
+  if (!listId) {return null}
+  useEffect(() => {
+    getData()
+  }, [listId]);
+  const getData = async () => {
+    const data = await blogService.getBlogInfo(listId)
+    blogContent = data.content
+    await Vditor.preview(renderDivDom.current as HTMLDivElement, data.content, {
+      mode: "light",
+      cdn: '/vditor',
+      theme: { current: 'wechat', path: '/vditor/dist/css/content-theme' },
+      hljs: { style: 'github' }
+    })
+  }
   // 处理图片URL的粘贴和输入
   const handleImageUrl = useCallback(async (text: string) => {
     const imgRegex = /!\[.*?]\((http[s]?:\/\/.*?)\)/g;
@@ -45,10 +49,8 @@ export function Editor({
         console.error('Failed to download image:', error);
       }
     }
-
     return newText;
   }, []);
-
   // 检测删除的图片
   const checkDeletedImages = useCallback((newContent: string, oldContent: string) => {
     const getImageUrls = (content: string) => {
@@ -60,10 +62,8 @@ export function Editor({
       }
       return urls;
     };
-
     const oldUrls = getImageUrls(oldContent);
     const newUrls = getImageUrls(newContent);
-
     // 找出在旧内容中存在但在新内容中不存在的图片URL
     oldUrls.forEach(url => {
       if (!newUrls.has(url)) {
@@ -74,27 +74,25 @@ export function Editor({
       }
     });
   }, []);
-
   // 防抖处理内容变化
   const debouncedContentChange = useCallback(
     debounce((newContent: string) => {
       const oldContent = previousContentRef.current;
       checkDeletedImages(newContent, oldContent);
       previousContentRef.current = newContent;
-      onChange?.(newContent);
     }, 500),
-    [onChange, checkDeletedImages]
+    [checkDeletedImages]
   );
-
-  useEffect(() => {
-    const element = editorRef.current;
-    if (!element || vditorRef.current) return;
-
-    const vditor = new Vditor(element, {
-      height,
+  const editBlog = () => {
+    const vditor = new Vditor(renderDivDom.current as HTMLDivElement, {
+      height: '100%',
       mode: "wysiwyg",
-      placeholder,
       theme: "classic",
+      cdn: '/vditor',
+      preview: {
+        theme: { current: 'wechat', path: '/vditor/dist/css/content-theme' },
+        hljs: { style: 'github' }
+      },
       cache: {
         enable: false
       },
@@ -103,7 +101,7 @@ export function Editor({
         success: (_: HTMLElement, result: string) => {
           try {
             const response = JSON.parse(result) as UploadResult;
-            const { url } = response.data[0];
+            const {url} = response.data[0];
             // 在光标处插入图片
             vditor.insertValue(`![image](${url})`);
           } catch (error) {
@@ -122,36 +120,26 @@ export function Editor({
       },
       toolbar: ["emoji", "headings", "bold", "italic", "strike", "link", "|", "list", "ordered-list", "check", "outdent", "indent", "|", "quote", "line", "code", "inline-code", "insert-before", "insert-after", "|", "upload", "table", "|", "undo", "redo", "|", "fullscreen", "preview"],
       after: () => {
-        if (value) {
-          vditor.setValue(value);
+        if (blogContent) {
+          vditor.setValue(blogContent);
         }
         vditorRef.current = vditor;
-        previousContentRef.current = value;
+        previousContentRef.current = blogContent;
       }
-    });
-
-    return () => {
-      // debouncedContentChange.cancel();
-      if (vditorRef.current) {
-        vditorRef.current.destroy();
-        vditorRef.current = undefined;
-      }
-    };
-  }, [height, placeholder, handleImageUrl, value]);
-
-  // 提供验证图片的方法
-  const validateImages = useCallback(async () => {
-    if (vditorRef.current && articleId) {
-      const content = vditorRef.current.getValue();
-      await imageService.validateAndCleanImages(content, articleId);
-    }
-  }, [articleId]);
-
+    })
+  }
+  const changeToPreview = () => {
+    console.log(vditorRef.current)
+    vditorRef.current && vditorRef.current.renderPreview()
+  }
   return (
-    <div
-      ref={editorRef}
-      style={{ width: '100%', height: '100vh' }}
-      className="w-full h-full"
-    />
-  );
+      <div className="bg-blue-100">
+        <Button onPress={() => navigate(-1)}>返回</Button>
+        <Button onPress={() => editBlog()}>编辑</Button>
+        <Button onPress={() => changeToPreview()}>test</Button>
+        <div className="max-w-[800px] mx-auto">
+          <div ref={renderDivDom}></div>
+        </div>
+      </div>
+  )
 }

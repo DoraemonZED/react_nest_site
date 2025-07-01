@@ -36,7 +36,7 @@ export default function Blog() {
         </Card>
       </Button>
 
-      {/* 抽屉菜单 */}
+      {/* 抽屉菜单小屏时 */}
       <Drawer
         isOpen={isDrawerOpen}
         onOpenChange={(open) => setIsDrawerOpen(open)}
@@ -67,7 +67,6 @@ export default function Blog() {
                 <CategoryList
                   categories={categories}
                   loading={isLoading}
-                  error={null}
                 />
               </DrawerBody>
             </>
@@ -82,7 +81,6 @@ export default function Blog() {
             <CategoryList
               categories={categories}
               loading={isLoading}
-              error={null}
             />
           </Card>
         </div>
