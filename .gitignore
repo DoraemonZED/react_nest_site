@@ -6,7 +6,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+!vditor/dist/
 dist-ssr
 *.local
 
