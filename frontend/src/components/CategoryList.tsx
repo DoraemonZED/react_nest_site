@@ -1,8 +1,8 @@
 import { Card, CardBody } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
-
+import {useNavigate, useParams} from "react-router-dom";
 import { FadeIn } from "@/components/FadeIn";
 import { CategoryResponse } from "@/services/blogService.ts";
+import {useEffect} from "react";
 
 interface CategoryListProps {
   categories: CategoryResponse[]
@@ -14,6 +14,7 @@ export default function CategoryList({
   loading
 }: CategoryListProps) {
   const navigate = useNavigate();
+  const { menuId } = useParams<{ menuId: string }>();
 
   // 按 groupName 对分类进行分组
   const groupedCategories = categories.reduce(
@@ -26,6 +27,13 @@ export default function CategoryList({
     },
     {} as Record<string, CategoryResponse[]>,
   );
+
+  useEffect(() => {
+    let value = Object.entries(groupedCategories)
+    if (!menuId && value.length) {
+      navigate(`/blog/${value[0][1][0].id}`)
+    }
+  }, [loading])
 
   const handleClick = (id: number) => {
     navigate(`/blog/${id}`)

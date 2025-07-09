@@ -26,7 +26,7 @@ interface ExtendedRequestInit extends RequestInit {
 interface IResponse<T> {
   code: number;
   data: T;
-  message?: string;
+  msg?: string;
 }
 
 interface IPageResponse<T> extends IResponse<T> {
@@ -125,8 +125,8 @@ export async function request<T = any, P extends boolean = false>(
     // 处理响应数据
     const data = await handleResponse(response, responseType) as ApiResponse<T, P>;
     // 处理业务逻辑错误
-    if (data.code && data.code !== 200) {
-      new Error(data.message || '请求失败');
+    if (data.code && data.code >= 300) {
+      throw new Error(data.msg || '请求失败');
     }
     return data;
   } catch (error) {

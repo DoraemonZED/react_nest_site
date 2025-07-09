@@ -8,11 +8,11 @@ import "@/styles/globals.css";
 import "@/assets/iconfont/iconfont.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <Provider>
         <App />
       </Provider>
     </BrowserRouter>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 );

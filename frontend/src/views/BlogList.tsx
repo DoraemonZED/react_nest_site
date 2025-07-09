@@ -1,6 +1,6 @@
 import { Card, CardBody, Pagination } from "@heroui/react";
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {BlogListItems, blogService} from "@/services/blogService.ts";
 
 export default function BlogList() {
@@ -15,17 +15,21 @@ export default function BlogList() {
     return null;
   }
 
+  const isInitMount = useRef(true);
   useEffect(() => {
-    pageNum === 1 ? getData() : setPageNum(1)
-  }, [menuId])
-
-  useEffect(() => {
+    if (isInitMount.current) {
+      isInitMount.current = false;
+      return
+    }
     getData()
-  }, [pageNum])
+  }, [pageNum]);
+  useEffect(() => {
+    pageNum !== 1 ? setPageNum(1) : getData()
+  }, [menuId]);
 
   const getData = async () => {
     let data = await blogService.getBlogList({pageSize, pageNum}, menuId)
-    setBlogList(data.data)
+    data.data && setBlogList(data.data)
     setPageTotal(data.totalPages)
   }
 

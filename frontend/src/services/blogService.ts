@@ -30,7 +30,7 @@ export interface BlogInfo {
 export const blogService = {
   // 获取博客菜单
   async getBlogMenu() {
-    const response = await http.get<CategoryResponse[]>('/blog/menu');
+    const response = await http.get<CategoryResponse[]>('/blog/category');
     return response.data;
   },
   // 根据菜单获取详情列表
@@ -39,7 +39,7 @@ export const blogService = {
   },
   // 根据id获取博客
   async getBlogInfo(id: string) {
-    const response = await http.get<BlogInfo>(`/blog/item/${id}`);
+    const response = await http.get<BlogInfo>(`/blog/post/${id}`);
     return response.data;
   }
 }

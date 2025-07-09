@@ -24,22 +24,32 @@ export default function BlogDetail(){
   useEffect(() => {
     getData()
   }, [listId]);
+  /**
+   * 获取博客数据
+   */
   const getData = async () => {
     const data = await blogService.getBlogInfo(listId)
     blogContent = data.content
-    await Vditor.preview(renderDivDom.current as HTMLDivElement, data.content, {
+    renderBlog()
+  }
+  /**
+   * 渲染blog
+   */
+  const renderBlog = () => {
+    Vditor.preview(renderDivDom.current as HTMLDivElement, blogContent, {
       mode: "light",
       cdn: '/vditor',
       theme: { current: 'wechat', path: '/vditor/dist/css/content-theme' },
       hljs: { style: 'github' }
     })
   }
-  // 处理图片URL的粘贴和输入
+  /**
+   * 处理图片URL的粘贴和输入
+   */
   const handleImageUrl = useCallback(async (text: string) => {
     const imgRegex = /!\[.*?]\((http[s]?:\/\/.*?)\)/g;
     let match;
     let newText = text;
-
     while ((match = imgRegex.exec(text)) !== null) {
       try {
         const imageUrl = match[1];
@@ -51,7 +61,9 @@ export default function BlogDetail(){
     }
     return newText;
   }, []);
-  // 检测删除的图片
+  /**
+   * 检测删除的图片
+   */
   const checkDeletedImages = useCallback((newContent: string, oldContent: string) => {
     const getImageUrls = (content: string) => {
       const regex = /!\[.*?]\((.*?)\)/g;
@@ -74,15 +86,17 @@ export default function BlogDetail(){
       }
     });
   }, []);
-  // 防抖处理内容变化
-  const debouncedContentChange = useCallback(
-    debounce((newContent: string) => {
-      const oldContent = previousContentRef.current;
-      checkDeletedImages(newContent, oldContent);
-      previousContentRef.current = newContent;
-    }, 500),
-    [checkDeletedImages]
-  );
+  /**
+   * 防抖处理内容变化
+   */
+  const debouncedContentChange = useCallback(debounce((newContent: string) => {
+    const oldContent = previousContentRef.current;
+    checkDeletedImages(newContent, oldContent);
+    previousContentRef.current = newContent;
+  }, 500), [checkDeletedImages]);
+  /**
+   * 编辑博客
+   */
   const editBlog = () => {
     const vditor = new Vditor(renderDivDom.current as HTMLDivElement, {
       height: '100%',
@@ -128,15 +142,24 @@ export default function BlogDetail(){
       }
     })
   }
+  /**
+   * 预览
+   */
   const changeToPreview = () => {
-    console.log(vditorRef.current)
-    vditorRef.current && vditorRef.current.renderPreview()
+    renderBlog()
+    if (vditorRef.current) {
+      vditorRef.current.destroy()
+    }
   }
+  /**
+   * 提交修改的博客
+   */
   return (
       <div className="bg-blue-100">
         <Button onPress={() => navigate(-1)}>返回</Button>
         <Button onPress={() => editBlog()}>编辑</Button>
-        <Button onPress={() => changeToPreview()}>test</Button>
+        <Button onPress={() => changeToPreview()} color='warning'>取消</Button>
+        <Button color='success'>提交</Button>
         <div className="max-w-[800px] mx-auto">
           <div ref={renderDivDom}></div>
         </div>
