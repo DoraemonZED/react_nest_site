@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RedisModule } from '@nestjs-modules/ioredis';
-import configuration from './config/index';
-import { UserModule } from './route/user/user.module';
-import { BlogModule } from './route/blog/blog.module';
-import {MulterModule} from "@nestjs/platform-express";
-import * as Minio from 'minio';
+import { UserModule } from './user/user.module';
+import { BlogModule } from './blog/blog.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
+import configuration from './common/config'
+import {APP_INTERCEPTOR, Reflector} from "@nestjs/core";
+import {ResponseInterceptor} from "./common/interceptor/response.interceptor";
 
 @Module({
   imports: [
@@ -16,22 +16,18 @@ import * as Minio from 'minio';
       isGlobal: true,
       load: [configuration],
     }),
-    // typeorm数据库配置
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => config.get('db.mysql')
-    }),
-    //redis缓存配置
-    RedisModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => config.get('redis')
-    }),
-    // 路由模块
     UserModule,
     BlogModule,
+    AuthModule,
+    PrismaModule,
   ],
+  controllers: [],
   providers: [
+    {
+      provide: APP_INTERCEPTOR, // 全局注册响应拦截器
+      useClass: ResponseInterceptor,
+    },
+    Reflector,
   ],
-  exports: []
 })
 export class AppModule {}

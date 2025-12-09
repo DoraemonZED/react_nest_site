@@ -1,30 +1,26 @@
-import {forwardRef, Module} from "@nestjs/common";
-import {JwtModule} from "@nestjs/jwt";
-import {ConfigService} from "@nestjs/config";
-import {AuthService} from "./auth.service";
-import {LocalStrategyGuard} from "./localStrategy.guard";
-import {JwtStrategyGuard} from "./jwtStrategy.guard";
-import {PassportModule} from "@nestjs/passport";
-import {UserModule} from "../route/user/user.module";
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { RedisModule } from '../redis/redis.module';
+import { UserModule } from '../user/user.module';
+import { AuthController } from './auth.controller';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    UserModule,
+    PassportModule,
+    RedisModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('jwt')
     }),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    forwardRef(() => UserModule),
   ],
-  providers: [
-    AuthService,
-    LocalStrategyGuard,
-    JwtStrategyGuard,
-  ],
-  exports: [
-    AuthService,
-    LocalStrategyGuard,
-    JwtStrategyGuard,
-  ]
+  providers: [AuthService, LocalStrategy, JwtStrategy],
+  controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}
